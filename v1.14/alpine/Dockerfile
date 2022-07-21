@@ -13,15 +13,19 @@ RUN apk update \
         ca-certificates \
         ruby ruby-irb ruby-etc ruby-webrick \
         tini \
- && apk add --no-cache --virtual .build-deps \
+ && apk add tzdata --no-cache --virtual .build-deps \
         build-base linux-headers \
         ruby-dev gnupg \
+ && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+ && echo Asia/Shanghai > /etc/timezone \
  && echo 'gem: --no-document' >> /etc/gemrc \
  && gem install oj -v 3.10.18 \
  && gem install json -v 2.4.1 \
  && gem install async-http -v 0.54.0 \
  && gem install ext_monitor -v 0.1.2 \
  && gem install fluentd -v 1.14.6 \
+ && gem install elasticsearch -v 7.6 \
+ && gem install fluent-plugin-elasticsearch
  && gem install bigdecimal -v 1.4.4 \
  && apk del .build-deps \
  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem /usr/lib/ruby/gems/2.*/gems/fluentd-*/test
